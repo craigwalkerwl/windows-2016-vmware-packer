@@ -1,13 +1,17 @@
 {
   "variables": {
+    "esxi_host": "192.168.1.3",
+    "esxi_datastore": "SSD_001",
+    "esxi_username": "root",
+    "esxi_password": "R3dhat00",
     "vm_name": "windows-base-2016",
     "output_directory": "output",
     "cpu": "2",
     "ram_size": "4096",
     "disk_size": "41440",
-    "iso_url": "http://care.dlservice.microsoft.com/dl/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
+    "iso_url": "E:/Dropbox/ISO/Windows/en_windows_server_2016_updated_feb_2018_x64_dvd_11636692.iso",
     "iso_checksum_type": "sha1",
-    "iso_checksum": "3BB1C60417E9AEB3F4CE0EB02189C0C84A1C6691",
+    "iso_checksum": "7ADC82E00F1367B43897BB969A75BBF96D46F588",
     "headless": ""
   },
   "builders": [{
@@ -38,7 +42,14 @@
       "./scripts/win-updates.ps1",
       "./scripts/microsoft-updates.bat"
     ],
+    "remote_type": "esx5",
+    "remote_host": "{{user `esxi_host`}}",
+    "remote_datastore": "{{user `esxi_datastore`}}",
+    "remote_username": "{{user `esxi_username`}}",
+    "remote_password": "{{user `esxi_password`}}",
+    "keep_registered": true,
     "vmx_data": {
+      "ethernet0.networkName": "LAN",
       "RemoteDisplay.vnc.enabled": "false",
       "RemoteDisplay.vnc.port": "5900",
       "gui.fitguestusingnativedisplayresolution": "FALSE",
@@ -52,10 +63,10 @@
     "type": "powershell",
      "scripts": [
         "./scripts/install-chocolatey.ps1",
-        "./scripts/install-openssh.ps1",
-        "./scripts/install-vmware-tools.ps1"
+        "./scripts/install-vmware-tools.ps1",
+        "./scripts/install-notepadplusplus.ps1"
     ],
-    "valid_exit_codes": [0, 1641]
+    "valid_exit_codes": [0, 1641, 3010]
   },
   {
     "type": "windows-restart",
